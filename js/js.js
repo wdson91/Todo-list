@@ -70,6 +70,8 @@ const updateTodo = (text) => {
 
         if(todoTitle.innerText === oldInput){
             todoTitle.innerText = text
+
+            updateTodoLocalStorage(text,oldInput)
         }
     })
 
@@ -159,7 +161,8 @@ document.addEventListener("click",(e) =>{
 
     if(targetEl.classList.contains("finish-todo")){
         parentEl.classList.toggle("done")
-        
+
+        updateTodoStatus(todoTitle)
     }
 
     if(targetEl.classList.contains("remove-todo")){
@@ -257,8 +260,29 @@ const removeTodo = (todoText) =>{
 
     const todos = getTodos();
 
-    const filteredTodos = todos.filter((todo)=> todo.text != todoText)
+    const filteredTodos = todos.filter((todo)=> todo.text !== todoText)
     
     localStorage.setItem("todos",JSON.stringify(filteredTodos));
 }
+
+
+const updateTodoStatus = (todoText) => {
+    
+    const todos =  getTodos();
+
+    todos.map((todo)=> todo.text === todo.text ?(todo.done = !todo.done):null);
+    
+    localStorage.setItem("todos",JSON.stringify(todos));
+
+};
+const updateTodoLocalStorage = (todoNewText,todoOldText) => {
+    
+    const todos =  getTodos();
+
+    todos.map((todo)=> todo.text === todoOldText ?(todo.text = todoNewText):null);
+    
+    localStorage.setItem("todos",JSON.stringify(todos));
+
+}
+
 loadTodos();
